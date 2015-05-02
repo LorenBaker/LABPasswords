@@ -2,7 +2,7 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="LabPasswords.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="PasswordsFilePath" Type="System.String" Scope="User">
+    <Setting Name="PasswordsDropboxFolder" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="ActiveUserID" Type="System.Int32" Scope="User">
@@ -13,6 +13,12 @@
     </Setting>
     <Setting Name="SelectedItems" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="MinPasswordLength" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">8</Value>
+    </Setting>
+    <Setting Name="MaxPasswordLength" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">15</Value>
     </Setting>
   </Settings>
 </SettingsFile>

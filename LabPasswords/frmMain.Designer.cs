@@ -37,6 +37,7 @@
             System.Windows.Forms.Label lblWebsitePassword;
             System.Windows.Forms.Label lblWebsiteURLAddress;
             System.Windows.Forms.Label lblWebsiteUserID;
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.frameDetails = new System.Windows.Forms.GroupBox();
             this.frameWebsite = new System.Windows.Forms.GroupBox();
             this.btnCopyPassword = new System.Windows.Forms.Button();
@@ -82,6 +83,8 @@
             this.MenuStrip1 = new System.Windows.Forms.MenuStrip();
             this.menuChangeAppPassword = new System.Windows.Forms.ToolStripMenuItem();
             this.menuRandomPassword = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuAndroidCompanionApp = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuRefresh = new System.Windows.Forms.ToolStripMenuItem();
             this.menuAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.frameFilterItems = new System.Windows.Forms.GroupBox();
             this.lblUsersFilter = new System.Windows.Forms.Label();
@@ -89,6 +92,8 @@
             this.SplitContainer2 = new System.Windows.Forms.SplitContainer();
             this.listPasswordItems = new System.Windows.Forms.ListBox();
             this.cbxItemTypes = new System.Windows.Forms.ComboBox();
+            this.savePasswordsFileBackgroundWorker = new System.ComponentModel.BackgroundWorker();
+            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             lblGeneralAccountPhoneNumber = new System.Windows.Forms.Label();
             lblGeneralAccountPrimaryPhoneNumber = new System.Windows.Forms.Label();
             lblSoftwareKeyCode = new System.Windows.Forms.Label();
@@ -224,7 +229,7 @@
             this.frameDetails.Margin = new System.Windows.Forms.Padding(0);
             this.frameDetails.Name = "frameDetails";
             this.frameDetails.Padding = new System.Windows.Forms.Padding(0);
-            this.frameDetails.Size = new System.Drawing.Size(678, 731);
+            this.frameDetails.Size = new System.Drawing.Size(680, 780);
             this.frameDetails.TabIndex = 0;
             this.frameDetails.TabStop = false;
             // 
@@ -238,7 +243,7 @@
             this.frameWebsite.Controls.Add(this.txtWebsiteUserID);
             this.frameWebsite.Controls.Add(lblWebsiteUserID);
             this.frameWebsite.Controls.Add(this.txtWebsiteURLAddress);
-            this.frameWebsite.Location = new System.Drawing.Point(8, 374);
+            this.frameWebsite.Location = new System.Drawing.Point(8, 636);
             this.frameWebsite.Margin = new System.Windows.Forms.Padding(4);
             this.frameWebsite.Name = "frameWebsite";
             this.frameWebsite.Padding = new System.Windows.Forms.Padding(4);
@@ -305,7 +310,7 @@
             this.frameGeneralAccountInformation.Controls.Add(this.txtGeneralAccountPrimaryPhoneNumber);
             this.frameGeneralAccountInformation.Controls.Add(lblGeneralAccountPrimaryPhoneNumber);
             this.frameGeneralAccountInformation.Controls.Add(this.txtGeneralAccountNumber);
-            this.frameGeneralAccountInformation.Location = new System.Drawing.Point(4, 312);
+            this.frameGeneralAccountInformation.Location = new System.Drawing.Point(17, 463);
             this.frameGeneralAccountInformation.Margin = new System.Windows.Forms.Padding(4);
             this.frameGeneralAccountInformation.Name = "frameGeneralAccountInformation";
             this.frameGeneralAccountInformation.Padding = new System.Windows.Forms.Padding(4);
@@ -387,7 +392,7 @@
             // frameComments
             // 
             this.frameComments.Controls.Add(this.txtComments);
-            this.frameComments.Location = new System.Drawing.Point(3, 769);
+            this.frameComments.Location = new System.Drawing.Point(8, 804);
             this.frameComments.Margin = new System.Windows.Forms.Padding(4);
             this.frameComments.Name = "frameComments";
             this.frameComments.Padding = new System.Windows.Forms.Padding(4);
@@ -431,7 +436,7 @@
             this.btnCopyKeyCode.Margin = new System.Windows.Forms.Padding(4);
             this.btnCopyKeyCode.Name = "btnCopyKeyCode";
             this.btnCopyKeyCode.Size = new System.Drawing.Size(447, 45);
-            this.btnCopyKeyCode.TabIndex = 42;
+            this.btnCopyKeyCode.TabIndex = 1;
             this.btnCopyKeyCode.TabStop = false;
             this.btnCopyKeyCode.Text = "Copy Key Code";
             this.btnCopyKeyCode.UseVisualStyleBackColor = true;
@@ -455,8 +460,7 @@
             this.updnSoftwareKeyCodeSubgroupLength.Margin = new System.Windows.Forms.Padding(4);
             this.updnSoftwareKeyCodeSubgroupLength.Name = "updnSoftwareKeyCodeSubgroupLength";
             this.updnSoftwareKeyCodeSubgroupLength.Size = new System.Drawing.Size(60, 22);
-            this.updnSoftwareKeyCodeSubgroupLength.TabIndex = 34;
-            this.updnSoftwareKeyCodeSubgroupLength.TabStop = false;
+            this.updnSoftwareKeyCodeSubgroupLength.TabIndex = 1;
             this.updnSoftwareKeyCodeSubgroupLength.ValueChanged += new System.EventHandler(this.updnSoftwareKeyCodeSubgroupLength_ValueChanged);
             // 
             // frameCreditCardInfo
@@ -475,7 +479,7 @@
             this.frameCreditCardInfo.Controls.Add(lblCreditCardPrimaryPhoneNumber);
             this.frameCreditCardInfo.Controls.Add(lblExpirationDate);
             this.frameCreditCardInfo.Controls.Add(this.txtCreditCardAccountNumber);
-            this.frameCreditCardInfo.Location = new System.Drawing.Point(4, 95);
+            this.frameCreditCardInfo.Location = new System.Drawing.Point(8, 227);
             this.frameCreditCardInfo.Margin = new System.Windows.Forms.Padding(4);
             this.frameCreditCardInfo.Name = "frameCreditCardInfo";
             this.frameCreditCardInfo.Padding = new System.Windows.Forms.Padding(4);
@@ -490,7 +494,7 @@
             this.txtCreditCardExpirationYear.Margin = new System.Windows.Forms.Padding(4);
             this.txtCreditCardExpirationYear.Name = "txtCreditCardExpirationYear";
             this.txtCreditCardExpirationYear.Size = new System.Drawing.Size(78, 22);
-            this.txtCreditCardExpirationYear.TabIndex = 48;
+            this.txtCreditCardExpirationYear.TabIndex = 3;
             // 
             // txtCreditCardExpirationMonth
             // 
@@ -498,7 +502,7 @@
             this.txtCreditCardExpirationMonth.Margin = new System.Windows.Forms.Padding(4);
             this.txtCreditCardExpirationMonth.Name = "txtCreditCardExpirationMonth";
             this.txtCreditCardExpirationMonth.Size = new System.Drawing.Size(54, 22);
-            this.txtCreditCardExpirationMonth.TabIndex = 47;
+            this.txtCreditCardExpirationMonth.TabIndex = 2;
             // 
             // btnCopyCreditCardAccountNumber
             // 
@@ -566,7 +570,7 @@
             this.txtCreditCardAltPhoneNumber.Margin = new System.Windows.Forms.Padding(4);
             this.txtCreditCardAltPhoneNumber.Name = "txtCreditCardAltPhoneNumber";
             this.txtCreditCardAltPhoneNumber.Size = new System.Drawing.Size(140, 22);
-            this.txtCreditCardAltPhoneNumber.TabIndex = 6;
+            this.txtCreditCardAltPhoneNumber.TabIndex = 5;
             // 
             // txtCreditCardPrimaryPhoneNumber
             // 
@@ -574,7 +578,7 @@
             this.txtCreditCardPrimaryPhoneNumber.Margin = new System.Windows.Forms.Padding(4);
             this.txtCreditCardPrimaryPhoneNumber.Name = "txtCreditCardPrimaryPhoneNumber";
             this.txtCreditCardPrimaryPhoneNumber.Size = new System.Drawing.Size(140, 22);
-            this.txtCreditCardPrimaryPhoneNumber.TabIndex = 5;
+            this.txtCreditCardPrimaryPhoneNumber.TabIndex = 4;
             // 
             // txtCreditCardAccountNumber
             // 
@@ -596,6 +600,7 @@
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(363, 23);
             this.txtSearch.TabIndex = 0;
+            this.txtSearch.TabStop = false;
             this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
             // 
             // menuSave
@@ -627,7 +632,7 @@
             this.SplitContainer1.Panel2.AutoScroll = true;
             this.SplitContainer1.Panel2.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.SplitContainer1.Panel2.Controls.Add(this.SplitContainer2);
-            this.SplitContainer1.Size = new System.Drawing.Size(964, 861);
+            this.SplitContainer1.Size = new System.Drawing.Size(966, 910);
             this.SplitContainer1.SplitterDistance = 125;
             this.SplitContainer1.SplitterWidth = 1;
             this.SplitContainer1.TabIndex = 1;
@@ -652,6 +657,7 @@
             this.btnNew.Name = "btnNew";
             this.btnNew.Size = new System.Drawing.Size(99, 40);
             this.btnNew.TabIndex = 1;
+            this.btnNew.TabStop = false;
             this.btnNew.Text = "New";
             this.btnNew.UseVisualStyleBackColor = true;
             this.btnNew.Click += new System.EventHandler(this.btnNew_Click);
@@ -662,6 +668,7 @@
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(99, 40);
             this.btnDelete.TabIndex = 0;
+            this.btnDelete.TabStop = false;
             this.btnDelete.Text = "Delete";
             this.btnDelete.UseVisualStyleBackColor = true;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
@@ -685,11 +692,13 @@
             this.menuSave,
             this.menuChangeAppPassword,
             this.menuRandomPassword,
+            this.menuAndroidCompanionApp,
+            this.menuRefresh,
             this.menuAbout});
             this.MenuStrip1.Location = new System.Drawing.Point(0, 0);
             this.MenuStrip1.Name = "MenuStrip1";
             this.MenuStrip1.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
-            this.MenuStrip1.Size = new System.Drawing.Size(960, 28);
+            this.MenuStrip1.Size = new System.Drawing.Size(962, 28);
             this.MenuStrip1.TabIndex = 6;
             this.MenuStrip1.Text = "MenuStrip1";
             // 
@@ -706,6 +715,20 @@
             this.menuRandomPassword.Size = new System.Drawing.Size(143, 24);
             this.menuRandomPassword.Text = "Random Password";
             this.menuRandomPassword.Click += new System.EventHandler(this.menuRandomPassword_Click);
+            // 
+            // menuAndroidCompanionApp
+            // 
+            this.menuAndroidCompanionApp.Name = "menuAndroidCompanionApp";
+            this.menuAndroidCompanionApp.Size = new System.Drawing.Size(188, 24);
+            this.menuAndroidCompanionApp.Text = "Android Companion App";
+            this.menuAndroidCompanionApp.Click += new System.EventHandler(this.menuAndroidCompanionApp_Click);
+            // 
+            // menuRefresh
+            // 
+            this.menuRefresh.Name = "menuRefresh";
+            this.menuRefresh.Size = new System.Drawing.Size(70, 24);
+            this.menuRefresh.Text = "Refresh";
+            this.menuRefresh.Click += new System.EventHandler(this.menuRefresh_Click);
             // 
             // menuAbout
             // 
@@ -771,7 +794,7 @@
             // 
             this.SplitContainer2.Panel2.AutoScroll = true;
             this.SplitContainer2.Panel2.Controls.Add(this.frameDetails);
-            this.SplitContainer2.Size = new System.Drawing.Size(960, 731);
+            this.SplitContainer2.Size = new System.Drawing.Size(962, 780);
             this.SplitContainer2.SplitterDistance = 275;
             this.SplitContainer2.SplitterWidth = 7;
             this.SplitContainer2.TabIndex = 7;
@@ -786,6 +809,7 @@
             this.listPasswordItems.Name = "listPasswordItems";
             this.listPasswordItems.Size = new System.Drawing.Size(269, 676);
             this.listPasswordItems.TabIndex = 46;
+            this.listPasswordItems.UseTabStops = false;
             // 
             // cbxItemTypes
             // 
@@ -795,16 +819,23 @@
             this.cbxItemTypes.Name = "cbxItemTypes";
             this.cbxItemTypes.Size = new System.Drawing.Size(269, 26);
             this.cbxItemTypes.TabIndex = 45;
+            this.cbxItemTypes.TabStop = false;
             this.cbxItemTypes.SelectedIndexChanged += new System.EventHandler(this.cbxItemTypes_SelectedIndexChanged);
+            // 
+            // savePasswordsFileBackgroundWorker
+            // 
+            this.savePasswordsFileBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.savePasswordsFileBackgroundWorker_DoWork);
+            this.savePasswordsFileBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.savePasswordsFileBackgroundWorker_RunWorkerCompleted);
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(972, 869);
+            this.ClientSize = new System.Drawing.Size(974, 918);
             this.Controls.Add(this.SplitContainer1);
-            this.MaximumSize = new System.Drawing.Size(990, 916);
-            this.MinimumSize = new System.Drawing.Size(990, 916);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximumSize = new System.Drawing.Size(992, 965);
+            this.MinimumSize = new System.Drawing.Size(992, 965);
             this.Name = "frmMain";
             this.Padding = new System.Windows.Forms.Padding(4);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -901,6 +932,10 @@
         internal System.Windows.Forms.GroupBox frameDeleteNewButtons;
         private System.Windows.Forms.Button btnNew;
         private System.Windows.Forms.Button btnDelete;
+        private System.Windows.Forms.ToolStripMenuItem menuAndroidCompanionApp;
+        private System.Windows.Forms.ToolStripMenuItem menuRefresh;
+        private System.ComponentModel.BackgroundWorker savePasswordsFileBackgroundWorker;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
     }
 }
 

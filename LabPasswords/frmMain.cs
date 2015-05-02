@@ -15,7 +15,6 @@ using System.Diagnostics;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Media;
 
-
 namespace LabPasswords
 {
     public partial class frmMain : Form
@@ -25,7 +24,7 @@ namespace LabPasswords
         {
             get
             {
-                return Path.Combine(LabPasswords.Properties.Settings.Default.PasswordsFilePath, mPasswordsFilename);
+                return Path.Combine(LabPasswords.Properties.Settings.Default.PasswordsDropboxFolder, mPasswordsFilename);
             }
         }
 
@@ -50,9 +49,7 @@ namespace LabPasswords
 
         private const String mPasswordsFilename = "PasswordsDatafile.txt";
         private const String iv = "74172ca8e67761d2";
-
-        //TODO: Get password from user
-        private String key = CryptLib.getHashSha256("Test Password", 32); //32 bytes = 256 bits
+        private String mKey = "";
 
         private clsLabPasswords mLabPasswords;
         private List<clsPasswordItem> mUserAllPasswordItems;
@@ -73,6 +70,7 @@ namespace LabPasswords
         private int mActiveUserID;
 
         private bool mSuspendHandlers = true;
+        private bool mIsDirty = false;
 
         private const int ALL_ITEM_TYPES = 0;
         private const int CREDIT_CARDS = 1;
@@ -83,7 +81,6 @@ namespace LabPasswords
         private const int CONTROL_MARGIN = 7;
         private int HOME_TOP = 4;
         private int HOME_LEFT = 95;
-
 
         public frmMain()
         {
@@ -102,7 +99,11 @@ namespace LabPasswords
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
             saveSelectedItems(mSelectedItems);
-            writePasswordfile(false);
+            if (mIsDirty)
+            {
+                Debug.WriteLine("frmMain_FormClosing WRITE PASSWORDS FILE");
+                writePasswordfile(false);
+            }
         }
 
         private void frmMain_Resize(object sender, EventArgs e)
@@ -118,7 +119,9 @@ namespace LabPasswords
             HOME_TOP = framePasswordItem.Bottom + CONTROL_MARGIN;
             HOME_LEFT = framePasswordItem.Left;
 
-            if (LabPasswords.Properties.Settings.Default.PasswordsFilePath.Equals(""))
+            mKey = getPasswordFromUser();
+
+            if (LabPasswords.Properties.Settings.Default.PasswordsDropboxFolder.Equals(""))
             {
                 selectPasswordsFilePath();
             }
@@ -152,16 +155,33 @@ namespace LabPasswords
                 }
                 else
                 {
-                    clsUsers newUser = new clsUsers();
-                    newUser.UserID = getNextUserID;
-                    // TODO: show dialog asking user for their name
-                    newUser.UserName = "Loren";
+                    String newUserName = "";
+                    frmGetNewUserName dialog = new frmGetNewUserName();
+                    DialogResult result = dialog.ShowDialog();
+
+                    if (result == DialogResult.OK)
+                    {
+                        newUserName = dialog.newUserName;
+                        clsUsers newUser = new clsUsers();
+                        newUser.UserID = getNextUserID;
+                        newUser.UserName = newUserName;
+                    }
+                    else
+                    {
+                        StringBuilder msg = new StringBuilder();
+                        msg.Append("Sorry, but unable to proceed without a user name.")
+                            .Append(System.Environment.NewLine).Append(System.Environment.NewLine)
+                            .Append("Quitting the application!");
+                        MessageBox.Show(msg.ToString(), "No User Name Provided", MessageBoxButtons.OK);
+                        Application.Exit();
+                    }                
                 }
             }
 
             fillPasswordLists();
             fillUsersAndItemTypes();
             bsPasswordItems.PositionChanged += new System.EventHandler(bsPasswordItems_PositionChanged);
+
             bindPasswordItemControls();
             mSelectedItems = loadSelectedItems(); // also sets mSelectedItem
             setTextChangeListeners();
@@ -178,6 +198,10 @@ namespace LabPasswords
                     {
                         bsPasswordItems.Position = position;
                     }
+                    else
+                    {
+                        bsPasswordItems.Position = 0;
+                    }
                 }
                 else
                 {
@@ -189,18 +213,81 @@ namespace LabPasswords
 
             }
 
+            setUpFileListener();
             mSuspendHandlers = false;
+            bsPasswordItems_PositionChanged(new object(), new EventArgs());
+        }
+
+        private void setUpFileListener()
+        {
+            // Create a new FileSystemWatcher and set its properties.
+            FileSystemWatcher watcher = new FileSystemWatcher();
+            // make the watcher thread safe
+            watcher.SynchronizingObject = cbxUsersFilter;
+            watcher.Path = LabPasswords.Properties.Settings.Default.PasswordsDropboxFolder;
+            // Watch for changes in LastWrite times
+            watcher.NotifyFilter = NotifyFilters.LastWrite;
+            // Only watch Password data file.
+            watcher.Filter = mPasswordsFilename;
+
+            // Add event handlers.
+            watcher.Changed += new FileSystemEventHandler(OnChanged);
+            watcher.Created += new FileSystemEventHandler(OnChanged);
+
+            // Begin watching.
+            watcher.EnableRaisingEvents = true;
+        }
+
+        private void OnChanged(object sender, FileSystemEventArgs e)
+        {
+            updateUI();
+            //MessageBox.Show(mPasswordsFilename + " changed", "FileSystemWatcher", MessageBoxButtons.OK);
+        }
+
+        private void updateUI()
+        {
+            // read the changed Passwords file
+            if (readPasswordfile())
+            {
+                mSuspendHandlers = true;
+                sortPasswordfile();
+                fillPasswordLists();
+                fillUsersAndItemTypes();
+                mSuspendHandlers = false;
+            }
+        }
+
+        private string getPasswordFromUser()
+        {
+            String key = "";
+            frmGetPassword dialog = new frmGetPassword();
+            DialogResult result = dialog.ShowDialog();
+            if (result == DialogResult.Cancel)
+            {
+                Application.Exit();
+            }
+            else if (result == DialogResult.OK)
+            {
+                key = dialog.passwordKey;
+            }
+            return key;
         }
 
 
         private void setTextChangeListeners()
         {
-            //txtSearch.TextChanged += new EventHandler(txtSearch_TextChangedEvent);
             txtItemName.Validating += new System.ComponentModel.CancelEventHandler(txtItemName_Validating);
+        }
+
+        private void passwordItemChanged(object sender, PropertyChangedEventArgs e)
+        {
+            Debug.WriteLine("PASSWORDItemChanged");
+            mIsDirty = true;
         }
 
         void txtItemName_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            Debug.WriteLine("txtItemName_Validating");
             String textBoxText = txtItemName.Text.Trim();
             if (textBoxText.Length == 0)
             {
@@ -367,10 +454,12 @@ namespace LabPasswords
 
         private void selectPasswordsFilePath()
         {
-            //TODO: Open folder picker
-            String passwordsFilePath = Path.Combine(@"C:\Users", "Loren", "Dropbox", "BakerShare", "LABPasswords");
-            LabPasswords.Properties.Settings.Default.PasswordsFilePath = passwordsFilePath;
-            LabPasswords.Properties.Settings.Default.Save();
+            if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+            {
+                //String passwordsFilePath = Path.Combine(@"C:\Users", "Loren", "Dropbox", "BakerShare", "LABPasswords");
+                LabPasswords.Properties.Settings.Default.PasswordsDropboxFolder = folderBrowserDialog1.SelectedPath;
+                LabPasswords.Properties.Settings.Default.Save();
+            }
         }
 
         #region Read and Write Methods
@@ -384,21 +473,22 @@ namespace LabPasswords
                 if (File.Exists(PasswordsDataFullFilename))
                 {
                     FileInfo oFileInfo = new FileInfo(PasswordsDataFullFilename);
-                    Debug.WriteLine("Encrypted text file found. Length = " + oFileInfo.Length.ToString("N0"));
+                    //Debug.WriteLine("Encrypted text file found. Length = " + oFileInfo.Length.ToString("N0"));
                     String fileContent = File.ReadAllText(PasswordsDataFullFilename);
-                    Debug.WriteLine("Encrypted file read. Length = " + fileContent.Length.ToString("N0"));
+                    //Debug.WriteLine("Encrypted file read. Length = " + fileContent.Length.ToString("N0"));
 
                     CryptLib _crypt = new CryptLib();
-                    String decryptedText = _crypt.decrypt(fileContent, key, iv);
-                    Debug.WriteLine("Padded file decrypted. Length = " + decryptedText.Length.ToString("N0"));
+                    String decryptedText = _crypt.decrypt(fileContent, mKey, iv);
+                    //Debug.WriteLine("Padded file decrypted. Length = " + decryptedText.Length.ToString("N0"));
 
                     // trim spaces to overcome last character not being written issue!
                     decryptedText = decryptedText.Trim();
-                    Debug.WriteLine("File decrypted. Length = " + decryptedText.Length.ToString("N0"));
+                    //Debug.WriteLine("File decrypted. Length = " + decryptedText.Length.ToString("N0"));
 
                     mLabPasswords = JsonConvert.DeserializeObject<clsLabPasswords>(decryptedText);
                     Debug.WriteLine("File deserialize. " + mLabPasswords.PasswordItems.Count + " password items and " + mLabPasswords.Users.Count + " users found.");
                     results = true;
+                    mIsDirty = false;
                 }
                 else
                 {
@@ -431,23 +521,23 @@ namespace LabPasswords
             // serialize JSON to a string, encrypt, and then write the encrypted string to a file
             //String fileContent = JsonConvert.SerializeObject(mLabPasswords, Formatting.Indented);
             String fileContent = JsonConvert.SerializeObject(mLabPasswords);
-            Debug.WriteLine("mLabPasswords serialized. Length = " + fileContent.Length.ToString("N0"));
+            //Debug.WriteLine("mLabPasswords serialized. Length = " + fileContent.Length.ToString("N0"));
 
             // add spaces to overcome last character not being written issue!
             fileContent = fileContent.Trim();
             fileContent = fileContent + "     ";
-            Debug.WriteLine("mLabPasswords padded. Length = " + fileContent.Length.ToString("N0"));
+            // Debug.WriteLine("mLabPasswords padded. Length = " + fileContent.Length.ToString("N0"));
 
             CryptLib _crypt = new CryptLib();
-            String encryptedFileContent = _crypt.encrypt(fileContent, key, iv);
-            Debug.WriteLine("mLabPasswords encrypted. Length = " + encryptedFileContent.Length.ToString("N0"));
+            String encryptedFileContent = _crypt.encrypt(fileContent, mKey, iv);
+            // Debug.WriteLine("mLabPasswords encrypted. Length = " + encryptedFileContent.Length.ToString("N0"));
 
             File.WriteAllText(PasswordsDataFullFilename, encryptedFileContent);
             //String tempFilePath = Path.Combine(@"C:\Users", "Loren", "Documents", "PasswordsTesting", "encryptedPasswordsDatafile.txt");
             //File.WriteAllText(tempFilePath, encryptedFileContent);
             FileInfo oFileInfo = new FileInfo(PasswordsDataFullFilename);
             //FileInfo oFileInfo = new FileInfo(tempFilePath);
-            Debug.WriteLine("File written. Length = " + oFileInfo.Length.ToString("N0"));
+            // Debug.WriteLine("File written. Length = " + oFileInfo.Length.ToString("N0"));
 
             if (showDialog)
             {
@@ -489,6 +579,7 @@ namespace LabPasswords
         private void cbxUsersFilter_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (mSuspendHandlers) return;
+            mSuspendHandlers = true;
 
             ComboBox comboBox = (ComboBox)sender;
             clsUsers user = (clsUsers)comboBox.SelectedItem;
@@ -501,6 +592,14 @@ namespace LabPasswords
 
             fillPasswordLists();
             showPasswordItems(LabPasswords.Properties.Settings.Default.ActiveItemTypeID);
+            mSuspendHandlers = false;
+            // move to the 0 position
+            if (bsPasswordItems.Count > 0)
+            {
+                bsPasswordItems.Position = 0;
+                bsPasswordItems_PositionChanged(new object(), new EventArgs());
+            }
+
         }
 
 
@@ -544,6 +643,12 @@ namespace LabPasswords
             showItemDetail(mActiveItemTypeID);
             txtSearch.Text = "";
             mSuspendHandlers = false;
+            // move to the 0 position
+            if (bsPasswordItems.Count > 0)
+            {
+                bsPasswordItems.Position = 0;
+                bsPasswordItems_PositionChanged(new object(), new EventArgs());
+            }
         }
 
         private void showPasswordItems(int itemTypeID)
@@ -575,13 +680,28 @@ namespace LabPasswords
 
         private void bsPasswordItems_PositionChanged(object sender, EventArgs e)
         {
+            Debug.WriteLine("bsPasswordItems_PositionChanged");
+            if (mSuspendHandlers) return;
+            mSuspendHandlers = true;
             clsPasswordItem item = (clsPasswordItem)bsPasswordItems.Current;
             if (item != null)
             {
                 mSelectedItem.ItemID = item.ID;
                 mSelectedItem.ItemPosition = bsPasswordItems.Position;
+                if (mSelectedLabPasswordsItem != null)
+                {
+                    mSelectedLabPasswordsItem.PropertyChanged -= passwordItemChanged;
+                }
                 mSelectedLabPasswordsItem = getPasswordsItem(item.ID);
-                showItemDetail(item.ItemType_ID);
+                if (mSelectedLabPasswordsItem != null)
+                {
+                    mSelectedLabPasswordsItem.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(passwordItemChanged);
+                }
+            }
+            showItemDetail(mActiveItemTypeID);
+            if (mIsDirty)
+            {
+                savePasswordsFileAsync(false);
             }
             mSuspendHandlers = false;
         }
@@ -747,13 +867,16 @@ namespace LabPasswords
         {
             using (MemoryStream ms = new MemoryStream())
             {
-                BinaryFormatter bf = new BinaryFormatter();
-                bf.Serialize(ms, selectedItems);
-                ms.Position = 0;
-                byte[] buffer = new byte[(int)ms.Length];
-                ms.Read(buffer, 0, buffer.Length);
-                LabPasswords.Properties.Settings.Default.SelectedItems = Convert.ToBase64String(buffer);
-                LabPasswords.Properties.Settings.Default.Save();
+                if (selectedItems != null)
+                {
+                    BinaryFormatter bf = new BinaryFormatter();
+                    bf.Serialize(ms, selectedItems);
+                    ms.Position = 0;
+                    byte[] buffer = new byte[(int)ms.Length];
+                    ms.Read(buffer, 0, buffer.Length);
+                    LabPasswords.Properties.Settings.Default.SelectedItems = Convert.ToBase64String(buffer);
+                    LabPasswords.Properties.Settings.Default.Save();
+                }
             }
         }
 
@@ -933,7 +1056,12 @@ namespace LabPasswords
 
         private void menuSave_Click(object sender, EventArgs e)
         {
-            writePasswordfile(true);
+            savePasswordsFileAsync(true);
+        }
+
+        private void savePasswordsFileAsync(bool verbose)
+        {
+            savePasswordsFileBackgroundWorker.RunWorkerAsync(verbose);
         }
 
 
@@ -944,7 +1072,26 @@ namespace LabPasswords
 
         private void menuRandomPassword_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("TO COME: menuRandomPassword_Click");
+            frmRandomPasswordDialog dialog = new frmRandomPasswordDialog();
+            DialogResult result = dialog.ShowDialog();
+            if (result == DialogResult.Yes)
+            {
+                // btnCopyToClipboardPasteAndClose_Clicked
+                Clipboard.SetText(dialog.resultPassword);
+                txtWebsitePassword.Text = dialog.resultPassword;
+                mSelectedLabPasswordsItem.WebsitePassword = dialog.resultPassword;
+
+            }
+            else if (result == DialogResult.OK)
+            {
+                //btnCopyPasswordAndClose_Clicked
+                Clipboard.SetText(dialog.resultPassword);
+            }
+        }
+
+        private void menuAndroidCompanionApp_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("TO COME: menuAndroidCompanionApp_Click");
         }
 
         private void menuAbout_Click(object sender, EventArgs e)
@@ -952,36 +1099,148 @@ namespace LabPasswords
             MessageBox.Show("TO COME: menuAbout_Click");
         }
 
+
+        private void menuRefresh_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("TO COME: menuRefresh_Click");
+        }
+
         private void btnCopyPasswordAndGoToWebsite_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("TO COME: btnCopyPasswordAndGoToWebsite_Click");
+            if (mSelectedLabPasswordsItem != null)
+            {
+                if (!mSelectedLabPasswordsItem.WebsitePassword.Equals(""))
+                {
+                    Clipboard.SetText(mSelectedLabPasswordsItem.WebsitePassword);
+                }
+                else
+                {
+                    Clipboard.Clear();
+                }
+
+                if (!mSelectedLabPasswordsItem.WebsiteURL.Equals(""))
+                {
+                    System.Diagnostics.Process.Start(mSelectedLabPasswordsItem.WebsiteURL);
+                }
+                else
+                {
+                    MessageBox.Show("Sorry. The website URL is empty!", "Unable to open website", MessageBoxButtons.OK);
+                }
+            }
         }
 
         private void btnCopyPassword_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("TO COME: btnCopyPassword_Click");
-
+            Clipboard.SetText(mSelectedLabPasswordsItem.WebsitePassword);
         }
 
         private void btnCopyKeyCode_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("TO COME: btnCopyKeyCode_Click");
+            Clipboard.SetText(mSelectedLabPasswordsItem.SoftwareKeyCode);
         }
 
         private void btnCopyCreditCardAccountNumber_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("TO COME: btnCopyCreditCardAccountNumber_Click");
+            Clipboard.SetText(mSelectedLabPasswordsItem.CreditCardAccountNumber);
         }
 
         private void btnCopyGeneralAccountNumber_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("TO COME: btnCopyGeneralAccountNumber_Click");
+            Clipboard.SetText(mSelectedLabPasswordsItem.GeneralAccountNumber);
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
+            StringBuilder msg = new StringBuilder();
+            msg.Append("Do you want to delete ");
+            int itemTypeID = mActiveItemTypeID;
+            clsPasswordItem item = getPasswordsItem(mSelectedItem.ItemID);
 
-            MessageBox.Show("TO COME: btnDelete_Click");
+            if (mActiveItemTypeID == ALL_ITEM_TYPES)
+            {
+                itemTypeID = item.ItemType_ID;
+            }
+
+            switch (itemTypeID)
+            {
+                case CREDIT_CARDS:
+                    msg.Append("Credit Card ");
+                    break;
+
+                case GENERAL_ACCOUNTS:
+                    msg.Append("General Account ");
+                    break;
+
+                case SOFTWARE:
+                    msg.Append("Software ");
+                    break;
+
+                case WEBSITES:
+                    msg.Append("Website ");
+                    break;
+
+            }
+
+            msg.Append("\"").Append(item.Name).Append("\"?");
+
+
+            DialogResult dialogResult = MessageBox.Show(msg.ToString(), "Delete Item", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                deletePasswordItem(item);
+            }
+        }
+
+        private void deletePasswordItem(clsPasswordItem item)
+        {
+            // find the binding source's new position.
+            int newPosition = mSelectedItem.ItemPosition;
+            if (newPosition + 1 == bsPasswordItems.Count)
+            {
+                // you are about to delete the last item in the displayed list
+                if (bsPasswordItems.Count > 1)
+                {
+                    newPosition--;
+                }
+                else
+                {
+                    // You're about to delete the only item in the displayed list
+                    newPosition = -1;
+                }
+            }
+
+            listPasswordItems.DataSource = null;
+            mLabPasswords.PasswordItems.Remove(item);
+            mUserAllPasswordItems.Remove(item);
+
+            switch (mActiveItemTypeID)
+            {
+                case ALL_ITEM_TYPES:
+                    showAllUserItems();
+                    break;
+
+                case CREDIT_CARDS:
+                    mUserCreditCards.Remove(item);
+                    showUserCreditCardItems();
+                    break;
+
+                case GENERAL_ACCOUNTS:
+                    mUserGeneralAccounts.Remove(item);
+                    showUserGeneralAccountItems();
+                    break;
+
+                case SOFTWARE:
+                    mUserSoftware.Remove(item);
+                    showUserSoftwareItems();
+                    break;
+
+                case WEBSITES:
+                    mUserWebsites.Remove(item);
+                    showUserWebsiteItems();
+                    break;
+            }
+            bsPasswordItems.Position = -1;
+            bsPasswordItems.Position = newPosition;
         }
 
         private void btnNew_Click(object sender, EventArgs e)
@@ -990,7 +1249,7 @@ namespace LabPasswords
 
             if (mActiveItemTypeID == ALL_ITEM_TYPES)
             {
-                NewPasswordItemTypeDialog dialog = new NewPasswordItemTypeDialog();
+                frmNewPasswordItemTypeDialog dialog = new frmNewPasswordItemTypeDialog();
                 DialogResult result = dialog.ShowDialog();
                 if (result == DialogResult.OK)
                 {
@@ -1127,12 +1386,18 @@ namespace LabPasswords
         private bool newNameExists(string proposedNewName)
         {
             bool result = false;
-            foreach (clsPasswordItem item in mLabPasswords.PasswordItems)
+            int itemCount = 0;
+            //foreach (clsPasswordItem item in mLabPasswords.PasswordItems)
+            foreach (clsPasswordItem item in mUserAllPasswordItems)
             {
                 if (item.Name.ToUpper().Equals(proposedNewName.ToUpper()))
                 {
-                    result = true;
-                    break;
+                    itemCount++;
+                    if (itemCount > 1)
+                    {
+                        result = true;
+                        break;
+                    }
                 }
             }
 
@@ -1147,6 +1412,21 @@ namespace LabPasswords
             String formattedKeyCode = clsFormattingMethods.formatTypicalAccountNumber(unformattedKeyCode, (int)updnSoftwareKeyCodeSubgroupLength.Value);
             txtSoftwareKeyCode.Text = formattedKeyCode;
         }
+
+        private void savePasswordsFileBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            mIsDirty = false;
+            Debug.WriteLine("Save Passwords file async START");
+            bool verbose = (bool)e.Argument;
+            writePasswordfile(verbose);
+        }
+
+        private void savePasswordsFileBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            Debug.WriteLine("Save Passwords file async COMPLETE");
+        }
+
+
 
 
     }

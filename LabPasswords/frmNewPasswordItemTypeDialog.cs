@@ -10,12 +10,12 @@ using System.Windows.Forms;
 
 namespace LabPasswords
 {
-    public partial class NewPasswordItemTypeDialog : Form
+    public partial class frmNewPasswordItemTypeDialog : Form
 
     {
         public int ItemTypeID = 1;
 
-        public NewPasswordItemTypeDialog()
+        public frmNewPasswordItemTypeDialog()
         {
             InitializeComponent();
         }

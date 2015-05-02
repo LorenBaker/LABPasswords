@@ -1,6 +1,6 @@
 ﻿namespace LabPasswords
 {
-    partial class NewPasswordItemTypeDialog
+    partial class frmNewPasswordItemTypeDialog
     {
         /// <summary>
         /// Required designer variable.
@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmNewPasswordItemTypeDialog));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.rbWebsite = new System.Windows.Forms.RadioButton();
             this.rbSoftware = new System.Windows.Forms.RadioButton();
@@ -128,16 +129,17 @@
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
-            // NewPasswordItemTypeDialog
+            // frmNewPasswordItemTypeDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(363, 289);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(381, 336);
             this.MinimumSize = new System.Drawing.Size(381, 336);
-            this.Name = "NewPasswordItemTypeDialog";
+            this.Name = "frmNewPasswordItemTypeDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Select New Item Type";
             this.groupBox1.ResumeLayout(false);

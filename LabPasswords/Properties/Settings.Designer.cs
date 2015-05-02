@@ -26,12 +26,12 @@ namespace LabPasswords.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string PasswordsFilePath {
+        public string PasswordsDropboxFolder {
             get {
-                return ((string)(this["PasswordsFilePath"]));
+                return ((string)(this["PasswordsDropboxFolder"]));
             }
             set {
-                this["PasswordsFilePath"] = value;
+                this["PasswordsDropboxFolder"] = value;
             }
         }
         
@@ -68,6 +68,30 @@ namespace LabPasswords.Properties {
             }
             set {
                 this["SelectedItems"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("8")]
+        public int MinPasswordLength {
+            get {
+                return ((int)(this["MinPasswordLength"]));
+            }
+            set {
+                this["MinPasswordLength"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("15")]
+        public int MaxPasswordLength {
+            get {
+                return ((int)(this["MaxPasswordLength"]));
+            }
+            set {
+                this["MaxPasswordLength"] = value;
             }
         }
     }
