@@ -1,6 +1,7 @@
 using System;
 using System.Text;
 using System.Security.Cryptography;
+using System.Windows.Forms;
 
 namespace LabPasswords
 {
@@ -129,8 +130,16 @@ namespace LabPasswords
                 }
                 catch (CryptographicException e) 
                 {
-                    System.Windows.Forms.MessageBox.Show("Decryption Failed. May have an invalid password. " + e.Message);
-                    //String errorMessage = e.Message;
+                    StringBuilder msg = new StringBuilder();
+                    msg.Append("Unable to decrypt Passwords file.").Append(System.Environment.NewLine).Append(System.Environment.NewLine)
+                        .Append("Please check that the provided password is correct.").Append(System.Environment.NewLine)
+                        .Append("Passwords are case sensitive");
+
+                    if (Control.IsKeyLocked(Keys.CapsLock))
+                    {
+                        msg.Append(System.Environment.NewLine).Append("NOTE: CAPS LOCK is on.");
+                    }
+                    System.Windows.Forms.MessageBox.Show(msg.ToString(),"Failed to Read Passwords File",MessageBoxButtons.OK);
                 }
 
 			}

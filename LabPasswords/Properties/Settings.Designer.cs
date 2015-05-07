@@ -94,5 +94,53 @@ namespace LabPasswords.Properties {
                 this["MaxPasswordLength"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int MaxNumberOfBackupFiles {
+            get {
+                return ((int)(this["MaxNumberOfBackupFiles"]));
+            }
+            set {
+                this["MaxNumberOfBackupFiles"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        public global::System.Drawing.Size frmMainSize {
+            get {
+                return ((global::System.Drawing.Size)(this["frmMainSize"]));
+            }
+            set {
+                this["frmMainSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        public global::System.Drawing.Point frmMainLocation {
+            get {
+                return ((global::System.Drawing.Point)(this["frmMainLocation"]));
+            }
+            set {
+                this["frmMainLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
+        public global::System.Windows.Forms.FormWindowState frmMainWindowState {
+            get {
+                return ((global::System.Windows.Forms.FormWindowState)(this["frmMainWindowState"]));
+            }
+            set {
+                this["frmMainWindowState"] = value;
+            }
+        }
     }
 }

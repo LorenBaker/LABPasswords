@@ -21,9 +21,12 @@ namespace LabPasswords
 
         private void frmGetPassword_Load(object sender, EventArgs e)
         {
+            txtWarningMessage.Rtf = @"{\rtf1\ansi \b WARNING\b0. Please remember your Password. It is used to encrypt your Passwords file and is \b NOT\b0 stored. There is no way to reset or recover your Password";        
+        }
 
-            txtWarningMessage.Rtf = @"{\rtf1\ansi \b WARNING\b0. Please remember your Password. It is used to encrypt your Passwords file and is \b NOT\b0 stored. There is no way to reset or recover your Password";
 
+        private void frmGetPassword_Shown(object sender, EventArgs e)
+        {
             if (LabPasswords.Properties.Settings.Default.PasswordsDropboxFolder.Equals(""))
             {
                 String msg = "Please select a Dropbox folder";
@@ -39,14 +42,8 @@ namespace LabPasswords
             }
             txtPassword.Select();
             //TODO: remove hard coded password
-            txtPassword.Text = "Test Password";
+            //txtPassword.Text = "Test Password";
         }
-
-        private void frmGetPassword_FormClosing(object sender, FormClosingEventArgs e)
-        {
-
-        }
-
 
         private void btnOK_Click(object sender, EventArgs e)
         {
@@ -127,6 +124,7 @@ namespace LabPasswords
                 txtDropboxFolder.Text = folderBrowserDialog1.SelectedPath;
             }
         }
+
 
 
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LabPasswords 
 {
-    class clsUsers 
+    public class clsUsers 
     {
         public int UserID { get; set; }
         public String UserName { get; set; }

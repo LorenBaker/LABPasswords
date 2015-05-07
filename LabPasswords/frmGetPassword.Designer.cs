@@ -30,28 +30,28 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmGetPassword));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.frameDropboxFolder = new System.Windows.Forms.GroupBox();
-            this.txtDropboxFolder = new System.Windows.Forms.TextBox();
-            this.btnBrowseForDropboxFolder = new System.Windows.Forms.Button();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.frameButtons = new System.Windows.Forms.GroupBox();
+            this.btnCancel = new System.Windows.Forms.Button();
+            this.btnOK = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.txtWarningMessage = new System.Windows.Forms.RichTextBox();
             this.frameEnterPassword = new System.Windows.Forms.GroupBox();
             this.btnDisplayPassword = new System.Windows.Forms.Button();
             this.txtPassword = new System.Windows.Forms.TextBox();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.txtWarningMessage = new System.Windows.Forms.RichTextBox();
-            this.frameButtons = new System.Windows.Forms.GroupBox();
-            this.btnOK = new System.Windows.Forms.Button();
-            this.btnCancel = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.frameDropboxFolder = new System.Windows.Forms.GroupBox();
+            this.btnBrowseForDropboxFolder = new System.Windows.Forms.Button();
+            this.txtDropboxFolder = new System.Windows.Forms.TextBox();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.frameDropboxFolder.SuspendLayout();
-            this.frameEnterPassword.SuspendLayout();
-            this.panel1.SuspendLayout();
-            this.frameButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.frameButtons.SuspendLayout();
+            this.panel1.SuspendLayout();
+            this.frameEnterPassword.SuspendLayout();
+            this.frameDropboxFolder.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -76,36 +76,72 @@
             this.splitContainer1.TabIndex = 0;
             this.splitContainer1.TabStop = false;
             // 
-            // frameDropboxFolder
+            // pictureBox1
             // 
-            this.frameDropboxFolder.Controls.Add(this.btnBrowseForDropboxFolder);
-            this.frameDropboxFolder.Controls.Add(this.txtDropboxFolder);
-            this.frameDropboxFolder.Location = new System.Drawing.Point(18, 23);
-            this.frameDropboxFolder.Name = "frameDropboxFolder";
-            this.frameDropboxFolder.Size = new System.Drawing.Size(530, 78);
-            this.frameDropboxFolder.TabIndex = 0;
-            this.frameDropboxFolder.TabStop = false;
-            this.frameDropboxFolder.Text = "Dropbox Folder:";
+            this.pictureBox1.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.pictureBox1.Image = global::LabPasswords.Properties.Resources.Passwords;
+            this.pictureBox1.Location = new System.Drawing.Point(12, 3);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(205, 432);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
             // 
-            // txtDropboxFolder
+            // frameButtons
             // 
-            this.txtDropboxFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtDropboxFolder.Location = new System.Drawing.Point(6, 30);
-            this.txtDropboxFolder.Name = "txtDropboxFolder";
-            this.txtDropboxFolder.Size = new System.Drawing.Size(428, 27);
-            this.txtDropboxFolder.TabIndex = 0;
+            this.frameButtons.Controls.Add(this.btnCancel);
+            this.frameButtons.Controls.Add(this.btnOK);
+            this.frameButtons.Location = new System.Drawing.Point(18, 320);
+            this.frameButtons.Name = "frameButtons";
+            this.frameButtons.Size = new System.Drawing.Size(530, 97);
+            this.frameButtons.TabIndex = 4;
+            this.frameButtons.TabStop = false;
             // 
-            // btnBrowseForDropboxFolder
+            // btnCancel
             // 
-            this.btnBrowseForDropboxFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnBrowseForDropboxFolder.Location = new System.Drawing.Point(440, 27);
-            this.btnBrowseForDropboxFolder.Name = "btnBrowseForDropboxFolder";
-            this.btnBrowseForDropboxFolder.Size = new System.Drawing.Size(75, 33);
-            this.btnBrowseForDropboxFolder.TabIndex = 1;
-            this.btnBrowseForDropboxFolder.TabStop = false;
-            this.btnBrowseForDropboxFolder.Text = "Browse";
-            this.btnBrowseForDropboxFolder.UseVisualStyleBackColor = true;
-            this.btnBrowseForDropboxFolder.Click += new System.EventHandler(this.btnBrowseForDropboxFolder_Click);
+            this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCancel.Location = new System.Drawing.Point(43, 24);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(191, 52);
+            this.btnCancel.TabIndex = 1;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // btnOK
+            // 
+            this.btnOK.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnOK.Location = new System.Drawing.Point(296, 24);
+            this.btnOK.Name = "btnOK";
+            this.btnOK.Size = new System.Drawing.Size(191, 52);
+            this.btnOK.TabIndex = 0;
+            this.btnOK.Text = "OK";
+            this.btnOK.UseVisualStyleBackColor = true;
+            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
+            // 
+            // panel1
+            // 
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel1.Controls.Add(this.txtWarningMessage);
+            this.panel1.Location = new System.Drawing.Point(18, 212);
+            this.panel1.Name = "panel1";
+            this.panel1.Padding = new System.Windows.Forms.Padding(5);
+            this.panel1.Size = new System.Drawing.Size(530, 102);
+            this.panel1.TabIndex = 3;
+            // 
+            // txtWarningMessage
+            // 
+            this.txtWarningMessage.BackColor = System.Drawing.SystemColors.Control;
+            this.txtWarningMessage.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtWarningMessage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtWarningMessage.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtWarningMessage.Location = new System.Drawing.Point(5, 5);
+            this.txtWarningMessage.Name = "txtWarningMessage";
+            this.txtWarningMessage.Size = new System.Drawing.Size(516, 88);
+            this.txtWarningMessage.TabIndex = 0;
+            this.txtWarningMessage.TabStop = false;
+            this.txtWarningMessage.Text = "";
             // 
             // frameEnterPassword
             // 
@@ -139,75 +175,40 @@
             this.txtPassword.Size = new System.Drawing.Size(428, 27);
             this.txtPassword.TabIndex = 0;
             // 
-            // panel1
+            // frameDropboxFolder
             // 
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel1.Controls.Add(this.txtWarningMessage);
-            this.panel1.Location = new System.Drawing.Point(18, 212);
-            this.panel1.Name = "panel1";
-            this.panel1.Padding = new System.Windows.Forms.Padding(5);
-            this.panel1.Size = new System.Drawing.Size(530, 102);
-            this.panel1.TabIndex = 3;
+            this.frameDropboxFolder.Controls.Add(this.btnBrowseForDropboxFolder);
+            this.frameDropboxFolder.Controls.Add(this.txtDropboxFolder);
+            this.frameDropboxFolder.Location = new System.Drawing.Point(18, 23);
+            this.frameDropboxFolder.Name = "frameDropboxFolder";
+            this.frameDropboxFolder.Size = new System.Drawing.Size(530, 78);
+            this.frameDropboxFolder.TabIndex = 0;
+            this.frameDropboxFolder.TabStop = false;
+            this.frameDropboxFolder.Text = "Dropbox Folder:";
             // 
-            // txtWarningMessage
+            // btnBrowseForDropboxFolder
             // 
-            this.txtWarningMessage.BackColor = System.Drawing.SystemColors.Control;
-            this.txtWarningMessage.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtWarningMessage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtWarningMessage.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtWarningMessage.Location = new System.Drawing.Point(5, 5);
-            this.txtWarningMessage.Name = "txtWarningMessage";
-            this.txtWarningMessage.Size = new System.Drawing.Size(516, 88);
-            this.txtWarningMessage.TabIndex = 0;
-            this.txtWarningMessage.TabStop = false;
-            this.txtWarningMessage.Text = "";
+            this.btnBrowseForDropboxFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBrowseForDropboxFolder.Location = new System.Drawing.Point(440, 27);
+            this.btnBrowseForDropboxFolder.Name = "btnBrowseForDropboxFolder";
+            this.btnBrowseForDropboxFolder.Size = new System.Drawing.Size(75, 33);
+            this.btnBrowseForDropboxFolder.TabIndex = 1;
+            this.btnBrowseForDropboxFolder.TabStop = false;
+            this.btnBrowseForDropboxFolder.Text = "Browse";
+            this.btnBrowseForDropboxFolder.UseVisualStyleBackColor = true;
+            this.btnBrowseForDropboxFolder.Click += new System.EventHandler(this.btnBrowseForDropboxFolder_Click);
             // 
-            // frameButtons
+            // txtDropboxFolder
             // 
-            this.frameButtons.Controls.Add(this.btnCancel);
-            this.frameButtons.Controls.Add(this.btnOK);
-            this.frameButtons.Location = new System.Drawing.Point(18, 320);
-            this.frameButtons.Name = "frameButtons";
-            this.frameButtons.Size = new System.Drawing.Size(530, 97);
-            this.frameButtons.TabIndex = 4;
-            this.frameButtons.TabStop = false;
-            // 
-            // btnOK
-            // 
-            this.btnOK.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOK.Location = new System.Drawing.Point(296, 24);
-            this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(191, 52);
-            this.btnOK.TabIndex = 0;
-            this.btnOK.Text = "OK";
-            this.btnOK.UseVisualStyleBackColor = true;
-            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
-            // 
-            // btnCancel
-            // 
-            this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCancel.Location = new System.Drawing.Point(43, 24);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(191, 52);
-            this.btnCancel.TabIndex = 1;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.pictureBox1.Image = global::LabPasswords.Properties.Resources.Passwords;
-            this.pictureBox1.Location = new System.Drawing.Point(12, 3);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(205, 432);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
+            this.txtDropboxFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtDropboxFolder.Location = new System.Drawing.Point(6, 30);
+            this.txtDropboxFolder.Name = "txtDropboxFolder";
+            this.txtDropboxFolder.Size = new System.Drawing.Size(428, 27);
+            this.txtDropboxFolder.TabIndex = 0;
             // 
             // frmGetPassword
             // 
+            this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(799, 432);
@@ -216,19 +217,19 @@
             this.Name = "frmGetPassword";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Enter Password";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmGetPassword_FormClosing);
             this.Load += new System.EventHandler(this.frmGetPassword_Load);
+            this.Shown += new System.EventHandler(this.frmGetPassword_Shown);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            this.frameDropboxFolder.ResumeLayout(false);
-            this.frameDropboxFolder.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.frameButtons.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
             this.frameEnterPassword.ResumeLayout(false);
             this.frameEnterPassword.PerformLayout();
-            this.panel1.ResumeLayout(false);
-            this.frameButtons.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.frameDropboxFolder.ResumeLayout(false);
+            this.frameDropboxFolder.PerformLayout();
             this.ResumeLayout(false);
 
         }

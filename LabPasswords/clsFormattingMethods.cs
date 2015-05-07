@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 namespace LabPasswords
 {
+    using System.IO;
+
     public static class clsFormattingMethods
     {
 
@@ -93,16 +95,16 @@ namespace LabPasswords
         }
 
         public static String[] CreditCardNames = { "American Express", "Diners Club", "Discover", "JCB", "MasterCard", "VISA" };
-        public  const String UNKNOWN = "UNKNOWN";
-        public  const int UNKNOWN_CARD = -1;
-        public  const int AMERICAN_EXPRESS = 0;
-        public  const int DINERS_CLUB = 1;
-        public  const int DISCOVER = 2;
-        public  const int JCB = 3;
-        public  const int MASTERCARD = 4;
-        public  const int VISA = 5;
+        public const String UNKNOWN = "UNKNOWN";
+        public const int UNKNOWN_CARD = -1;
+        public const int AMERICAN_EXPRESS = 0;
+        public const int DINERS_CLUB = 1;
+        public const int DISCOVER = 2;
+        public const int JCB = 3;
+        public const int MASTERCARD = 4;
+        public const int VISA = 5;
 
-        public  const int INVALID_POSITION = -1;
+        public const int INVALID_POSITION = -1;
         private const String dash = "\u2013";
 
 
@@ -216,7 +218,7 @@ namespace LabPasswords
             return match.Success;
         }
 
-        private  const String AmericanExpressCreditCardPattern = "^3[47][0-9]{13}$";
+        private const String AmericanExpressCreditCardPattern = "^3[47][0-9]{13}$";
         private static bool isAmericanExpress(String creditCardNumber)
         {
             Regex regex = new Regex(AmericanExpressCreditCardPattern);
@@ -224,7 +226,7 @@ namespace LabPasswords
             return match.Success;
         }
 
-        private  const String DiscoverCreditCardPattern = "^6(?:011|5[0-9]{2})[0-9]{12}$";
+        private const String DiscoverCreditCardPattern = "^6(?:011|5[0-9]{2})[0-9]{12}$";
         private static bool isDiscoverCard(String creditCardNumber)
         {
             Regex regex = new Regex(DiscoverCreditCardPattern);
@@ -232,7 +234,7 @@ namespace LabPasswords
             return match.Success;
         }
 
-        private  const String DinersClubCreditCardPattern = "^3(?:0[0-5]|[68][0-9])[0-9]{11}$";
+        private const String DinersClubCreditCardPattern = "^3(?:0[0-5]|[68][0-9])[0-9]{11}$";
         private static bool isDinersClubCard(String creditCardNumber)
         {
             Regex regex = new Regex(DinersClubCreditCardPattern);
@@ -240,7 +242,7 @@ namespace LabPasswords
             return match.Success;
         }
 
-        private  const String JCBCreditCardPattern = "^(?:2131|1800|35\\d{3})\\d{11}$";
+        private const String JCBCreditCardPattern = "^(?:2131|1800|35\\d{3})\\d{11}$";
         private static bool isJCBCard(String creditCardNumber)
         {
             Regex regex = new Regex(JCBCreditCardPattern);
@@ -256,7 +258,12 @@ namespace LabPasswords
 
         private static bool LuhnCheck(this int[] digits)
         {
-            return GetCheckValue(digits) == 0;
+            bool result = false;
+            if (digits.Length != 0)
+            {
+                result = GetCheckValue(digits) == 0;
+            }
+            return result;
         }
 
         private static int GetCheckValue(int[] digits)
@@ -270,7 +277,7 @@ namespace LabPasswords
             String unformattedAccountNumber = accountNumber.Trim();
             unformattedAccountNumber = unformattedAccountNumber.Replace("-", "");
             unformattedAccountNumber = unformattedAccountNumber.Replace(" ", "");
-            
+
             unformattedAccountNumber = unformattedAccountNumber.Replace(dash, "");
             return unformattedAccountNumber;
         }
@@ -294,9 +301,9 @@ namespace LabPasswords
                 {
                     substringLength = accountNumber.Length;
                 }
-                
+
                 sb.Append(accountNumber.Substring(0, substringLength));
-               // formattedNumber = accountNumber.Substring(0, substringLength);
+                // formattedNumber = accountNumber.Substring(0, substringLength);
                 int remainingLength = accountNumber.Length - substringLength;
                 int start = substringLength;
                 while (remainingLength > 0)
@@ -363,5 +370,60 @@ namespace LabPasswords
             return formattedNumber;
         }
 
+
+
+        // This method accepts two strings the represent two files to
+        // compare. A returns true if the contents of the files
+        // are the same. A returns false if the files are not the same.
+        public static bool FileCompare(string file1, string file2)
+        {
+            int file1byte;
+            int file2byte;
+            FileStream fs1;
+            FileStream fs2;
+
+            // Determine if the same file was referenced two times.
+            if (file1.ToUpper().Equals(file2.ToUpper()))
+            {
+                // Return true to indicate that the files are the same.
+                return true;
+            }
+
+            // Open the two files.
+            fs1 = new FileStream(file1, FileMode.Open);
+            fs2 = new FileStream(file2, FileMode.Open);
+
+            // Check the file sizes. If they are not the same, the files 
+            // are not the same.
+            if (fs1.Length != fs2.Length)
+            {
+                // Close the file
+                fs1.Close();
+                fs2.Close();
+
+                // Return false to indicate files are different
+                return false;
+            }
+
+            // Read and compare a byte from each file until either a
+            // non-matching set of bytes is found or until the end of
+            // file1 is reached.
+            do
+            {
+                // Read one byte from each file.
+                file1byte = fs1.ReadByte();
+                file2byte = fs2.ReadByte();
+            }
+            while ((file1byte == file2byte) && (file1byte != -1));
+
+            // Close the files.
+            fs1.Close();
+            fs2.Close();
+
+            // Return the success of the comparison. "file1byte" is 
+            // equal to "file2byte" at this point only if the files are 
+            // the same.
+            return ((file1byte - file2byte) == 0);
+        }
     }
 }
