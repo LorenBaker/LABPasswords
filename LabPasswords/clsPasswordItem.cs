@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 
 namespace LabPasswords
 {
-    class clsPasswordItem : INotifyPropertyChanged
+    public class clsPasswordItem : INotifyPropertyChanged
     {
         public int ID { get; set; }
 

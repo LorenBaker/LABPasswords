@@ -931,8 +931,8 @@
             // 
             // backupPasswordsFileBackgroundWorker
             // 
-            this.backupPasswordsFileBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backupPasswordsFileBackgroundWorker_DoWork);
-            this.backupPasswordsFileBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backupPasswordsFileBackgroundWorker_RunWorkerCompleted);
+            //this.backupPasswordsFileBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backupPasswordsFileBackgroundWorker_DoWork);
+            //this.backupPasswordsFileBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backupPasswordsFileBackgroundWorker_RunWorkerCompleted);
             // 
             // frmMain
             // 

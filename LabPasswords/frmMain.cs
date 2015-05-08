@@ -162,12 +162,7 @@ namespace LabPasswords
                 if (File.Exists(PasswordsDataFullFilename))
                 {
                     // 1) the Passwords file exists ... read and sort the file            
-                    if (readPasswordfile())
-                    {
-                        backupPasswordsFileBackgroundWorker.RunWorkerAsync();
-                        sortPasswordfile();
-                    }
-                    else
+                    if (!readPasswordfile())
                     {
                         // failed to read Passwords file ... try again.
                         goto RESTART;
@@ -396,10 +391,11 @@ namespace LabPasswords
             }
         }
 
-        private void backupPasswordsDataFile()
+        private void backupPasswordsDataFile(String key)
         {
-            if (needsBackingUp())
+            if (needsBackingUp(key))
             {
+                Debug.WriteLine("frmMain: backupPasswordsDataFile: file backup STARTING.");
                 int maxNumberOfBackupFiles = LabPasswords.Properties.Settings.Default.MaxNumberOfBackupFiles;
                 String sourceBackupFilename = "";
                 String destinationBackupFilename = "";
@@ -421,21 +417,15 @@ namespace LabPasswords
                     }
                 }
             }
+            else
+            {
+                Debug.WriteLine("frmMain: backupPasswordsDataFile: Backup NOT NEEDED.");
+            }
         }
 
-        private bool needsBackingUp()
+        private bool needsBackingUp(String key)
         {
-            bool passwordsFileNeedsBackingUp = true;
-
-            if (File.Exists(getPasswordsDataBackupFilename(1)))
-            {
-                // compare the Passwords file with bk1
-                // if the two files are the same, you don't need to backup the file
-                passwordsFileNeedsBackingUp = !clsFormattingMethods.FileCompare(PasswordsDataFullFilename,
-                    getPasswordsDataBackupFilename(1));
-            }
-
-            return passwordsFileNeedsBackingUp;
+            return !clsFormattingMethods.PasswordsFileCompare(key, mLabPasswords, getPasswordsDataBackupFilename(1));
         }
 
         private void setUpFileListener()
@@ -478,6 +468,7 @@ namespace LabPasswords
 
         private void OnFileChanged(object sender, FileSystemEventArgs e)
         {
+            Debug.WriteLine("frmMain: OnFileChanged Event");
             updateUI();
             //MessageBox.Show(mPasswordsFilename + " changed", "FileSystemWatcher", MessageBoxButtons.OK);
         }
@@ -689,7 +680,7 @@ namespace LabPasswords
             }
         }
 
-        private void sortPasswordfile()
+        public void sortPasswordfile()
         {
             sortPasswordItmes();
             sortUsers();
@@ -699,7 +690,16 @@ namespace LabPasswords
         {
             if (mLabPasswords.PasswordItems.Count > 0)
             {
-                mLabPasswords.PasswordItems.Sort((a, b) => String.Compare(a.Name.ToUpper(), b.Name.ToUpper()));
+                //mLabPasswords.PasswordItems.Sort((a, b) => String.Compare(a.Name.ToUpper(), b.Name.ToUpper()));
+                mLabPasswords.PasswordItems.Sort((a, b) =>
+                {
+                    int ret = a.Name.ToUpper().CompareTo(b.Name.ToUpper());
+                    if (ret == 0)
+                    {
+                        ret = a.ID - b.ID;
+                    }
+                    return ret;
+                });
             }
         }
 
@@ -707,7 +707,13 @@ namespace LabPasswords
         {
             if (mLabPasswords.Users.Count > 0)
             {
-                mLabPasswords.Users.Sort((a, b) => String.Compare(a.UserName.ToUpper(), b.UserName.ToUpper()));
+                //mLabPasswords.Users.Sort((a, b) => String.Compare(a.UserName.ToUpper(), b.UserName.ToUpper()));
+                mLabPasswords.Users.Sort((a, b) =>
+                {
+                    int ret = a.UserName.ToUpper().CompareTo(b.UserName.ToUpper());
+                    if (ret == 0) ret = a.UserID.CompareTo(b.UserID);
+                    return ret;
+                });
             }
         }
         #endregion
@@ -747,12 +753,15 @@ namespace LabPasswords
 
                     // trim spaces to overcome last character not being written issue!
                     decryptedText = decryptedText.Trim();
+
                     //Debug.WriteLine("File decrypted. Length = " + decryptedText.Length.ToString("N0"));
 
                     if (!decryptedText.Equals(""))
                     {
                         mLabPasswords = JsonConvert.DeserializeObject<clsLabPasswords>(decryptedText);
+                        sortPasswordfile();
                         Debug.WriteLine("File deserialize. " + mLabPasswords.PasswordItems.Count + " password items and " + mLabPasswords.Users.Count + " users found.");
+                        backupPasswordsDataFile(mKey);
                         results = true;
                         mIsDirty = false;
                         txtIsDirty.BackColor = Color.Green;
@@ -1806,16 +1815,16 @@ namespace LabPasswords
             Debug.WriteLine("Save Passwords file async COMPLETE");
         }
 
-        private void backupPasswordsFileBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            Debug.WriteLine("Backup Passwords file async START");
-            backupPasswordsDataFile();
-        }
+        //private void backupPasswordsFileBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        //{
+        //    Debug.WriteLine("Backup Passwords file async START");
+        //    backupPasswordsDataFile();
+        //}
 
-        private void backupPasswordsFileBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            Debug.WriteLine("Backup Passwords file async COMPLETE");
-        }
+        //private void backupPasswordsFileBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        //{
+        //    Debug.WriteLine("Backup Passwords file async COMPLETE");
+        //}
 
     }
 

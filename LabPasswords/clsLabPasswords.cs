@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LabPasswords
 {
-    class clsLabPasswords
+    public class clsLabPasswords
     {
         private List<clsUsers> mUsers = new List<clsUsers>();
         public List<clsUsers> Users

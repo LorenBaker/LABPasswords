@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 namespace LabPasswords
 {
+    using Newtonsoft.Json;
+    using System.Diagnostics;
     using System.IO;
 
     public static class clsFormattingMethods
@@ -370,60 +372,233 @@ namespace LabPasswords
             return formattedNumber;
         }
 
-
-
-        // This method accepts two strings the represent two files to
-        // compare. A returns true if the contents of the files
-        // are the same. A returns false if the files are not the same.
-        public static bool FileCompare(string file1, string file2)
+        // This method compares the provided decrypted Passwords file clsLabPasswords content 
+        // with the backup file clsLabPasswords content.
+        // Returns true if the decrypted contents of the files are the same.
+        // Returns false if the files are not the same.
+        public static bool PasswordsFileCompare(String key, clsLabPasswords passwordsObject, String backupFilename)
         {
-            int file1byte;
-            int file2byte;
-            FileStream fs1;
-            FileStream fs2;
-
-            // Determine if the same file was referenced two times.
-            if (file1.ToUpper().Equals(file2.ToUpper()))
+            String backupFileEncryptedContents = "";
+            try
             {
-                // Return true to indicate that the files are the same.
-                return true;
+                // verify that the backup file exists ... if not, return false
+                if (!File.Exists(backupFilename))
+                {
+                    Debug.WriteLine("clsFormattingMethods: FileCompare: " + backupFilename + " file not found... returning false");
+                    return false;
+                }
+
+                // Read the backup file
+                backupFileEncryptedContents = File.ReadAllText(backupFilename);
+
             }
-
-            // Open the two files.
-            fs1 = new FileStream(file1, FileMode.Open);
-            fs2 = new FileStream(file2, FileMode.Open);
-
-            // Check the file sizes. If they are not the same, the files 
-            // are not the same.
-            if (fs1.Length != fs2.Length)
+            catch (IOException e)
             {
-                // Close the file
-                fs1.Close();
-                fs2.Close();
-
-                // Return false to indicate files are different
+                Debug.WriteLine("clsFormattingMethods: FileCompare: IOException: " + e.Message + " ... returning false");
                 return false;
             }
 
-            // Read and compare a byte from each file until either a
-            // non-matching set of bytes is found or until the end of
-            // file1 is reached.
-            do
+            // Decrypt the backup file
+            if (backupFileEncryptedContents.Equals(""))
             {
-                // Read one byte from each file.
-                file1byte = fs1.ReadByte();
-                file2byte = fs2.ReadByte();
+                // there is nothing to decrypt .... return false
+                Debug.WriteLine("clsFormattingMethods: FileCompare: backup file encrypted content is empty... returning false");
+                return false;
             }
-            while ((file1byte == file2byte) && (file1byte != -1));
 
-            // Close the files.
-            fs1.Close();
-            fs2.Close();
+            String decryptedBackupFileContents;
+            try
+            {
+                CryptLib _crypt = new CryptLib();
+                String iv = backupFileEncryptedContents.Substring(0, 16);
+                backupFileEncryptedContents = backupFileEncryptedContents.Substring(16, backupFileEncryptedContents.Length - 16);
+                decryptedBackupFileContents = _crypt.decrypt(backupFileEncryptedContents, key, iv);
+                decryptedBackupFileContents = decryptedBackupFileContents.Trim();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("clsFormattingMethods: FileCompare: Exception decrypting backup file: " + e.Message + " ... returning false");
+                return false;
+            }
 
-            // Return the success of the comparison. "file1byte" is 
-            // equal to "file2byte" at this point only if the files are 
-            // the same.
-            return ((file1byte - file2byte) == 0);
+            // Create clsLabPasswords object from the backup file
+            clsLabPasswords backupFilePasswordsObject = JsonConvert.DeserializeObject<clsLabPasswords>(decryptedBackupFileContents);
+
+            bool result = false;
+
+            if (passwordsObject != null && backupFilePasswordsObject != null)
+            {
+                // Sort the backup file object
+                if (backupFilePasswordsObject.PasswordItems.Count > 0)
+                {
+
+                    //backupFilePasswordsObject.PasswordItems.Sort((a, b) => String.Compare(a.Name.ToUpper(), b.Name.ToUpper()));
+                    backupFilePasswordsObject.PasswordItems.Sort((a, b) =>
+                    {
+                        int ret = a.Name.ToUpper().CompareTo(b.Name.ToUpper());
+                        if (ret == 0)
+                        {
+                            ret = a.ID - b.ID;
+                        }
+                        return ret;
+                    });
+                }
+
+                if (backupFilePasswordsObject.Users.Count > 0)
+                {
+                    //backupFilePasswordsObject.Users.Sort((a, b) => String.Compare(a.UserName.ToUpper(), b.UserName.ToUpper()));
+                    backupFilePasswordsObject.Users.Sort((a, b) =>
+                    {
+                        int ret = a.UserName.ToUpper().CompareTo(b.UserName.ToUpper());
+                        if (ret == 0) ret = a.UserID.CompareTo(b.UserID);
+                        return ret;
+                    });
+                }
+
+                // Compare the password items count
+                if (passwordsObject.PasswordItems.Count == backupFilePasswordsObject.PasswordItems.Count)
+                {
+                    // Compare the users items count
+                    if (passwordsObject.Users.Count == passwordsObject.Users.Count)
+                    {
+                        // Compare the user lists
+                        if (compareUsers(passwordsObject.Users, passwordsObject.Users))
+                        {
+                            // Compare the password itme lists
+                            result = comparePasswordItems(passwordsObject.PasswordItems, backupFilePasswordsObject.PasswordItems);
+                        }
+                    }
+                }
+            }
+
+            return result;
         }
+
+
+        private static bool comparePasswordItems(List<clsPasswordItem> passwordsItemsList1, List<clsPasswordItem> passwordsItemsList2)
+        {
+            bool result = false;
+            int index = 0;
+
+            foreach (clsPasswordItem item1 in passwordsItemsList1)
+            {
+                clsPasswordItem item2 = passwordsItemsList2[index];
+                if (item1.ID != item2.ID)
+                {
+                    Debug.WriteLine("clsFormattingMethods: comparePasswordItems: item IDs are NOT the same! index = "
+                        + index + "; item1 ID = " + item1.ID + "; item2 ID = " + item2.ID
+                        + "; item1 Name = " + item1.Name + "; item 2 Name = " + item2.Name);
+                    return result;
+                }
+
+                if (!item1.AlternatePhoneNumber.Equals(item2.AlternatePhoneNumber)) break;
+                if (!item1.Comments.Equals(item2.Comments)) break;
+                if (!item1.CreditCardAccountNumber.Equals(item2.CreditCardAccountNumber)) break;
+                if (!item1.CreditCardExpirationMonth.Equals(item2.CreditCardExpirationMonth)) break;
+                if (!item1.CreditCardExpirationYear.Equals(item2.CreditCardExpirationYear)) break;
+                if (!item1.CreditCardSecurityCode.Equals(item2.CreditCardSecurityCode)) break;
+                if (!item1.GeneralAccountNumber.Equals(item2.GeneralAccountNumber)) break;
+                if (item1.ItemType_ID != item2.ItemType_ID) break;
+                if (!item1.Name.Equals(item2.Name)) break;
+                if (!item1.PrimaryPhoneNumber.Equals(item2.PrimaryPhoneNumber)) break;
+                if (!item1.SoftwareKeyCode.Equals(item2.SoftwareKeyCode)) break;
+                if (item1.SoftwareSubgroupLength != item2.SoftwareSubgroupLength) break;
+                if (item1.User_ID != item2.User_ID) break;
+                if (!item1.WebsitePassword.Equals(item2.WebsitePassword)) break;
+                if (!item1.WebsiteURL.Equals(item2.WebsiteURL)) break;
+                if (!item1.WebsiteUserID.Equals(item2.WebsiteUserID)) break;
+
+                index++;
+            }
+
+            if (index == passwordsItemsList1.Count)
+            {
+                // All password items examined. The two password item lists are the same.
+                result = true;
+            }
+            return result;
+        }
+
+        private static bool compareUsers(List<clsUsers> userList1, List<clsUsers> userList2)
+        {
+            bool result = false;
+            int index = 0;
+
+            foreach (clsUsers user1 in userList1)
+            {
+                clsUsers user2 = userList2[index];
+                if (user1.UserID != user2.UserID)
+                {
+                    Debug.WriteLine("clsFormattingMethods: compareUsers: user IDs are NOT the same!");
+                    break;
+                }
+
+                if (!user1.UserName.Equals(user2.UserName)) break;
+                index++;
+            }
+
+            if (index == userList1.Count)
+            {
+                // All users examined. The two user lists are the same.
+                result = true;
+            }
+
+            return result;
+        }
+
+
+        // This method accepts two strings (full file names) the represent the two files to compare.
+        // Returns true if the contents of the files are the same.
+        // Returns false if the files are not the same.
+        //public static bool FileCompare(string file1, string file2)
+        //{
+        //    int file1byte;
+        //    int file2byte;
+        //    FileStream fs1;
+        //    FileStream fs2;
+
+        //    // Determine if the same file was referenced two times.
+        //    if (file1.ToUpper().Equals(file2.ToUpper()))
+        //    {
+        //        // Return true to indicate that the files are the same.
+        //        return true;
+        //    }
+
+        //    // Open the two files.
+        //    fs1 = new FileStream(file1, FileMode.Open);
+        //    fs2 = new FileStream(file2, FileMode.Open);
+
+        //    // Check the file sizes. If they are not the same, the files 
+        //    // are not the same.
+        //    if (fs1.Length != fs2.Length)
+        //    {
+        //        // Close the file
+        //        fs1.Close();
+        //        fs2.Close();
+
+        //        // Return false to indicate files are different
+        //        return false;
+        //    }
+
+        //    // Read and compare a byte from each file until either a
+        //    // non-matching set of bytes is found or until the end of
+        //    // file1 is reached.
+        //    do
+        //    {
+        //        // Read one byte from each file.
+        //        file1byte = fs1.ReadByte();
+        //        file2byte = fs2.ReadByte();
+        //    }
+        //    while ((file1byte == file2byte) && (file1byte != -1));
+
+        //    // Close the files.
+        //    fs1.Close();
+        //    fs2.Close();
+
+        //    // Return the success of the comparison. "file1byte" is 
+        //    // equal to "file2byte" at this point only if the files are 
+        //    // the same.
+        //    return ((file1byte - file2byte) == 0);
+        //}
     }
 }
