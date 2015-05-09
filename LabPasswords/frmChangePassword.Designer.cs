@@ -121,9 +121,9 @@
             // btnDisplayReenterPassword
             // 
             this.btnDisplayReenterPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDisplayReenterPassword.Location = new System.Drawing.Point(410, 27);
+            this.btnDisplayReenterPassword.Location = new System.Drawing.Point(380, 27);
             this.btnDisplayReenterPassword.Name = "btnDisplayReenterPassword";
-            this.btnDisplayReenterPassword.Size = new System.Drawing.Size(75, 33);
+            this.btnDisplayReenterPassword.Size = new System.Drawing.Size(102, 33);
             this.btnDisplayReenterPassword.TabIndex = 1;
             this.btnDisplayReenterPassword.TabStop = false;
             this.btnDisplayReenterPassword.Text = "Display";
@@ -136,7 +136,7 @@
             this.txtReenterPassword.Location = new System.Drawing.Point(6, 30);
             this.txtReenterPassword.Name = "txtReenterPassword";
             this.txtReenterPassword.PasswordChar = '*';
-            this.txtReenterPassword.Size = new System.Drawing.Size(398, 27);
+            this.txtReenterPassword.Size = new System.Drawing.Size(364, 27);
             this.txtReenterPassword.TabIndex = 0;
             this.txtReenterPassword.TextChanged += new System.EventHandler(this.txtReenterPassword_TextChanged);
             // 
@@ -210,9 +210,9 @@
             // btnDisplayPassword
             // 
             this.btnDisplayPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDisplayPassword.Location = new System.Drawing.Point(410, 27);
+            this.btnDisplayPassword.Location = new System.Drawing.Point(380, 27);
             this.btnDisplayPassword.Name = "btnDisplayPassword";
-            this.btnDisplayPassword.Size = new System.Drawing.Size(75, 33);
+            this.btnDisplayPassword.Size = new System.Drawing.Size(102, 33);
             this.btnDisplayPassword.TabIndex = 1;
             this.btnDisplayPassword.TabStop = false;
             this.btnDisplayPassword.Text = "Display";
@@ -225,7 +225,7 @@
             this.txtPassword.Location = new System.Drawing.Point(6, 30);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
-            this.txtPassword.Size = new System.Drawing.Size(398, 27);
+            this.txtPassword.Size = new System.Drawing.Size(364, 27);
             this.txtPassword.TabIndex = 0;
             this.txtPassword.TextChanged += new System.EventHandler(this.txtPassword_TextChanged);
             // 
@@ -243,9 +243,9 @@
             // btnBrowseForDropboxFolder
             // 
             this.btnBrowseForDropboxFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnBrowseForDropboxFolder.Location = new System.Drawing.Point(440, 27);
+            this.btnBrowseForDropboxFolder.Location = new System.Drawing.Point(410, 27);
             this.btnBrowseForDropboxFolder.Name = "btnBrowseForDropboxFolder";
-            this.btnBrowseForDropboxFolder.Size = new System.Drawing.Size(75, 33);
+            this.btnBrowseForDropboxFolder.Size = new System.Drawing.Size(102, 33);
             this.btnBrowseForDropboxFolder.TabIndex = 1;
             this.btnBrowseForDropboxFolder.TabStop = false;
             this.btnBrowseForDropboxFolder.Text = "Browse";
@@ -257,7 +257,7 @@
             this.txtDropboxFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtDropboxFolder.Location = new System.Drawing.Point(6, 30);
             this.txtDropboxFolder.Name = "txtDropboxFolder";
-            this.txtDropboxFolder.Size = new System.Drawing.Size(428, 27);
+            this.txtDropboxFolder.Size = new System.Drawing.Size(394, 27);
             this.txtDropboxFolder.TabIndex = 0;
             // 
             // frmChangePassword

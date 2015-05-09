@@ -117,6 +117,9 @@ namespace LabPasswords
             this.DesktopBounds =
                 new Rectangle(LabPasswords.Properties.Settings.Default.frmMainLocation,
             LabPasswords.Properties.Settings.Default.frmMainSize);
+
+           // showItemDetail(mActiveItemTypeID);
+
         }
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
@@ -142,9 +145,7 @@ namespace LabPasswords
         #region Initilzation Methods
         private void initializeApp()
         {
-
-            HOME_TOP = framePasswordItem.Bottom + CONTROL_MARGIN;
-            HOME_LEFT = framePasswordItem.Left;
+            resizeForm();
 
         RESTART:
             mKey = getPasswordFromUser();
@@ -948,6 +949,7 @@ namespace LabPasswords
                 bsPasswordItems.Position = 0;
                 bsPasswordItems_PositionChanged(new object(), new EventArgs());
             }
+            resizeForm();
         }
 
         private void showPasswordItems(int itemTypeID)
@@ -1016,6 +1018,9 @@ namespace LabPasswords
 
         private void showItemDetail(int itemTypeID)
         {
+            HOME_TOP = framePasswordItem.Bottom + CONTROL_MARGIN;
+            HOME_LEFT = framePasswordItem.Left;
+
             switch (itemTypeID)
             {
                 case CREDIT_CARDS:
@@ -1813,6 +1818,121 @@ namespace LabPasswords
             addFileWatcherHandlers();
             txtIsDirty.BackColor = Color.Green;
             Debug.WriteLine("Save Passwords file async COMPLETE");
+        }
+
+        private void frmMain_Resize(object sender, EventArgs e)
+        {
+            resizeForm();
+        }
+
+        private void resizeForm()
+        {
+            //lblTop.Text = "Top = " + this.Top;
+            //lblLeft.Text = "Left = " + this.Left;
+            //lblWidth.Text = "Width = " + this.Width;
+            //lblHeight.Text = "Height = " + this.Height;
+
+            int displayWidth = SplitContainer2.Panel2.DisplayRectangle.Width;
+
+
+            int titleWidth = lblCardSecurityCode.Width;
+
+            frameComments.Width = displayWidth - 2 * CONTROL_MARGIN;
+            frameComments.Left = CONTROL_MARGIN;
+
+            framePasswordItem.Width = frameComments.Width;
+            framePasswordItem.Left = CONTROL_MARGIN;
+            framePasswordItem.Top = CONTROL_MARGIN;
+
+            frameCreditCardInfo.Width = frameComments.Width;
+            frameCreditCardInfo.Left = CONTROL_MARGIN;
+
+            frameGeneralAccountInformation.Width = frameComments.Width;
+            frameGeneralAccountInformation.Left = CONTROL_MARGIN;
+
+            frameSoftwareKeyCode.Width = frameComments.Width;
+            frameSoftwareKeyCode.Left = CONTROL_MARGIN;
+
+            frameWebsite.Width = frameComments.Width;
+            frameWebsite.Left = CONTROL_MARGIN;
+
+            //int frameWidth = frameComments.Width;
+
+            //txtIsDirty.Left = frameWidth - txtIsDirty.Width - CONTROL_MARGIN;
+            //txtItemName.Left = CONTROL_MARGIN;
+            //txtItemName.Width = frameWidth - txtIsDirty.Width - 3 * CONTROL_MARGIN;
+
+            //// frameSoftwareKeyCode controls 
+            //lblSoftwareKeyCode.Left = CONTROL_MARGIN;
+            //updnSoftwareKeyCodeSubgroupLength.Left = frameWidth - updnSoftwareKeyCodeSubgroupLength.Width - CONTROL_MARGIN;
+            //txtSoftwareKeyCode.Left =  CONTROL_MARGIN + titleWidth;
+            //txtSoftwareKeyCode.Width = frameWidth - titleWidth - updnSoftwareKeyCodeSubgroupLength.Width - 3*CONTROL_MARGIN;
+
+            //btnCopyKeyCode.Left = txtSoftwareKeyCode.Left;
+            //btnCopyKeyCode.Width = frameWidth - txtSoftwareKeyCode.Left - CONTROL_MARGIN;
+
+            //// frameCreditCardInfo controls
+            //lblCreditCardAccountNumber.Left = CONTROL_MARGIN;
+            //lblCardSecurityCode.Left = CONTROL_MARGIN;
+            //lblExpirationDate.Left = CONTROL_MARGIN;
+            //lblCreditCardPrimaryPhoneNumber.Left = CONTROL_MARGIN;
+
+            //txtCreditCardAccountNumber.Left = titleWidth + CONTROL_MARGIN;
+            //txtCreditCardSecurityCode.Left = txtCreditCardAccountNumber.Left;
+            //txtCreditCardExpirationMonth.Left = txtCreditCardAccountNumber.Left;
+            //txtCreditCardPrimaryPhoneNumber.Left = txtCreditCardAccountNumber.Left;
+            //txtCreditCardExpirationYear.Left = txtCreditCardExpirationMonth.Right + CONTROL_MARGIN;
+
+            //picCheckMark.Left = frameWidth - picCheckMark.Width - CONTROL_MARGIN;
+
+            //txtCreditCardAccountNumber.Width = frameWidth - titleWidth - 2* CONTROL_MARGIN;
+            //txtCreditCardType.Left = picCheckMark.Left - txtCreditCardType.Width- CONTROL_MARGIN;
+            //txtCreditCardAltPhoneNumber.Left = txtCreditCardType.Left;
+
+            //lblCreditCardType.Left = txtCreditCardType.Left -lblCreditCardType.Width- CONTROL_MARGIN;
+            //lblCreditCardAltPhoneNumber.Left = lblCreditCardType.Left;
+
+            //txtCreditCardSecurityCode.Width = txtCreditCardExpirationYear.Right - txtCreditCardExpirationMonth.Left;
+            //txtCreditCardPrimaryPhoneNumber.Width = txtCreditCardSecurityCode.Width;
+            //txtCreditCardAltPhoneNumber.Width = txtCreditCardSecurityCode.Width;
+            //txtCreditCardType.Width = txtCreditCardSecurityCode.Width;
+
+            //btnCopyCreditCardAccountNumber.Left = btnCopyKeyCode.Left;
+            //btnCopyCreditCardAccountNumber.Width = btnCopyKeyCode.Width;
+
+            //// frameWebsite Controls
+            //lblWebsiteURLAddress.Left = CONTROL_MARGIN;
+            //lblWebsiteUserID.Left = CONTROL_MARGIN;
+            //lblWebsitePassword.Left = CONTROL_MARGIN;
+
+            //txtWebsiteURLAddress.Left = titleWidth + CONTROL_MARGIN;
+            //txtWebsitePassword.Left = txtWebsiteURLAddress.Left;
+            //txtWebsiteUserID.Left = txtWebsiteURLAddress.Left;
+
+            //txtWebsiteURLAddress.Width = frameWidth - titleWidth - 2 * CONTROL_MARGIN;
+            //txtWebsitePassword.Width = txtWebsiteURLAddress.Width;
+            //txtWebsiteUserID.Width = txtWebsiteURLAddress.Width;
+
+            //btnCopyPassword.Left = txtWebsiteURLAddress.Left;
+            //btnCopyPasswordAndGoToWebsite.Left = frameWidth - btnCopyPasswordAndGoToWebsite.Width - CONTROL_CONTROL_MARGIN;
+
+            ////frameGeneralAccountInformation
+            //lblGeneralAccountNumber.Left = CONTROL_CONTROL_MARGIN;
+            //lblGeneralAccountPrimaryPhoneNumber.Left = CONTROL_CONTROL_MARGIN;
+
+            //txtGeneralAccountNumber.Left = titleWidth + CONTROL_CONTROL_MARGIN;
+            //txtGeneralAccountNumber.Width = frameWidth - titleWidth - 2* CONTROL_CONTROL_MARGIN;
+
+            //txtGeneralAccountPrimaryPhoneNumber.Left = txtGeneralAccountNumber.Left;
+            //txtGeneralAccountPrimaryPhoneNumber.Width = txtCreditCardSecurityCode.Width;
+            //txtGeneralAccountAltPhoneNumber.Width = txtCreditCardSecurityCode.Width;
+
+            //txtGeneralAccountAltPhoneNumber.Left = frameWidth - txtGeneralAccountAltPhoneNumber.Width - CONTROL_CONTROL_CONTROL_MARGIN;
+            //lblGeneralAccountAltPhoneNumber.Left = txtGeneralAccountAltPhoneNumber.Left - lblGeneralAccountAltPhoneNumber .Width- CONTROL_CONTROL_CONTROL_MARGIN;
+
+            //btnCopyGeneralAccountNumber.Left = txtGeneralAccountNumber.Left;
+            //btnCopyGeneralAccountNumber.Width = txtGeneralAccountNumber.Width;
+
         }
 
         //private void backupPasswordsFileBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)

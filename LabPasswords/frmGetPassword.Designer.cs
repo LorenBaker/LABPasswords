@@ -157,9 +157,9 @@
             // btnDisplayPassword
             // 
             this.btnDisplayPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDisplayPassword.Location = new System.Drawing.Point(440, 27);
+            this.btnDisplayPassword.Location = new System.Drawing.Point(403, 27);
             this.btnDisplayPassword.Name = "btnDisplayPassword";
-            this.btnDisplayPassword.Size = new System.Drawing.Size(75, 33);
+            this.btnDisplayPassword.Size = new System.Drawing.Size(110, 33);
             this.btnDisplayPassword.TabIndex = 1;
             this.btnDisplayPassword.TabStop = false;
             this.btnDisplayPassword.Text = "Display";
@@ -172,7 +172,7 @@
             this.txtPassword.Location = new System.Drawing.Point(6, 30);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
-            this.txtPassword.Size = new System.Drawing.Size(428, 27);
+            this.txtPassword.Size = new System.Drawing.Size(374, 27);
             this.txtPassword.TabIndex = 0;
             // 
             // frameDropboxFolder
@@ -189,9 +189,9 @@
             // btnBrowseForDropboxFolder
             // 
             this.btnBrowseForDropboxFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnBrowseForDropboxFolder.Location = new System.Drawing.Point(440, 27);
+            this.btnBrowseForDropboxFolder.Location = new System.Drawing.Point(403, 27);
             this.btnBrowseForDropboxFolder.Name = "btnBrowseForDropboxFolder";
-            this.btnBrowseForDropboxFolder.Size = new System.Drawing.Size(75, 33);
+            this.btnBrowseForDropboxFolder.Size = new System.Drawing.Size(110, 33);
             this.btnBrowseForDropboxFolder.TabIndex = 1;
             this.btnBrowseForDropboxFolder.TabStop = false;
             this.btnBrowseForDropboxFolder.Text = "Browse";
@@ -203,7 +203,7 @@
             this.txtDropboxFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtDropboxFolder.Location = new System.Drawing.Point(6, 30);
             this.txtDropboxFolder.Name = "txtDropboxFolder";
-            this.txtDropboxFolder.Size = new System.Drawing.Size(428, 27);
+            this.txtDropboxFolder.Size = new System.Drawing.Size(374, 27);
             this.txtDropboxFolder.TabIndex = 0;
             // 
             // frmGetPassword
@@ -211,6 +211,7 @@
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(799, 432);
             this.Controls.Add(this.splitContainer1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

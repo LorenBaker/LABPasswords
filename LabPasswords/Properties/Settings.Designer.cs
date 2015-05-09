@@ -109,7 +109,7 @@ namespace LabPasswords.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("840, 800")]
         public global::System.Drawing.Size frmMainSize {
             get {
                 return ((global::System.Drawing.Size)(this["frmMainSize"]));
@@ -121,7 +121,7 @@ namespace LabPasswords.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("30, 325")]
         public global::System.Drawing.Point frmMainLocation {
             get {
                 return ((global::System.Drawing.Point)(this["frmMainLocation"]));
