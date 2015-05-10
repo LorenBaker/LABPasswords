@@ -32,5 +32,32 @@
     <Setting Name="frmMainWindowState" Type="System.Windows.Forms.FormWindowState" Scope="User">
       <Value Profile="(Default)">Normal</Value>
     </Setting>
+    <Setting Name="frmChangePasswordSize" Type="System.Drawing.Size" Scope="User">
+      <Value Profile="(Default)">710, 500</Value>
+    </Setting>
+    <Setting Name="frmChangePasswordLocation" Type="System.Drawing.Point" Scope="User">
+      <Value Profile="(Default)">30, 325</Value>
+    </Setting>
+    <Setting Name="frmChangePasswordState" Type="System.Windows.Forms.FormWindowState" Scope="User">
+      <Value Profile="(Default)">Normal</Value>
+    </Setting>
+    <Setting Name="frmGetPasswordSize" Type="System.Drawing.Size" Scope="User">
+      <Value Profile="(Default)">710, 410</Value>
+    </Setting>
+    <Setting Name="frmGetPasswordLocation" Type="System.Drawing.Point" Scope="User">
+      <Value Profile="(Default)">30, 325</Value>
+    </Setting>
+    <Setting Name="frmGetPasswordState" Type="System.Windows.Forms.FormWindowState" Scope="User">
+      <Value Profile="(Default)">Normal</Value>
+    </Setting>
+    <Setting Name="frmRandomPasswordDialogSize" Type="System.Drawing.Size" Scope="User">
+      <Value Profile="(Default)">416, 423</Value>
+    </Setting>
+    <Setting Name="frmRandomPasswordDialogLocation" Type="System.Drawing.Point" Scope="User">
+      <Value Profile="(Default)">30, 325</Value>
+    </Setting>
+    <Setting Name="frmRandomPasswordDialogState" Type="System.Windows.Forms.FormWindowState" Scope="User">
+      <Value Profile="(Default)">Normal</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -24,8 +24,21 @@ namespace LabPasswords
 
         private void frmChangePassword_Load(object sender, EventArgs e)
         {
-            txtWarningMessage.Rtf = @"{\rtf1\ansi \b WARNING\b0. Please remember your Password. It is used to encrypt your Passwords file and is \b NOT\b0 stored. There is no way to reset or recover your Password";
+            txtWarningMessage.Rtf = @"{\rtf1\ansi \b WARNING\b0. Please remember your Password. It is used to encrypt your Passwords file and is \b NOT\b0 stored. There is no way to reset or recover your Password.";
 
+            // restore form's window state
+            this.WindowState = LabPasswords.Properties.Settings.Default.frmChangePasswordState;
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                // Never start minimized
+                this.WindowState = FormWindowState.Normal;
+            }
+            this.DesktopBounds =
+                new Rectangle(LabPasswords.Properties.Settings.Default.frmChangePasswordLocation,
+            LabPasswords.Properties.Settings.Default.frmChangePasswordSize);
+
+
+            // Check that there is a valid Dropbox folder
             if (LabPasswords.Properties.Settings.Default.PasswordsDropboxFolder.Equals(""))
             {
                 String msg = "Please select a Dropbox folder";
@@ -174,6 +187,22 @@ namespace LabPasswords
                 .Append(" Please Enter Passwords");
             MessageBox.Show(msg.ToString(), "Enter Passwords", MessageBoxButtons.OK);
         }
+
+        private void frmChangePassword_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            LabPasswords.Properties.Settings.Default.frmChangePasswordState = this.WindowState;
+            if (this.WindowState == FormWindowState.Normal)
+            {
+                LabPasswords.Properties.Settings.Default.frmChangePasswordLocation = this.Location;
+                LabPasswords.Properties.Settings.Default.frmChangePasswordSize = this.Size;
+            }
+            LabPasswords.Properties.Settings.Default.Save();
+        }
+
+
+
+
+
 
     }
 }

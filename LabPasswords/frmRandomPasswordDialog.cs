@@ -63,5 +63,30 @@ namespace LabPasswords
             resultPassword = txtPassword.Text;
             DialogResult = DialogResult.Yes;
         }
+
+        private void frmRandomPasswordDialog_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            LabPasswords.Properties.Settings.Default.frmRandomPasswordDialogState = this.WindowState;
+            if (this.WindowState == FormWindowState.Normal)
+            {
+                LabPasswords.Properties.Settings.Default.frmRandomPasswordDialogLocation = this.Location;
+                LabPasswords.Properties.Settings.Default.frmRandomPasswordDialogSize = this.Size;
+            }
+            LabPasswords.Properties.Settings.Default.Save();
+        }
+
+        private void frmRandomPasswordDialog_Load(object sender, EventArgs e)
+        {
+            // restore form's window state
+            this.WindowState = LabPasswords.Properties.Settings.Default.frmRandomPasswordDialogState;
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                // Never start minimized
+                this.WindowState = FormWindowState.Normal;
+            }
+            this.DesktopBounds =
+                new Rectangle(LabPasswords.Properties.Settings.Default.frmRandomPasswordDialogLocation,
+            LabPasswords.Properties.Settings.Default.frmRandomPasswordDialogSize);
+        }
     }
 }

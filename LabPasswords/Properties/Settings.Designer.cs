@@ -142,5 +142,113 @@ namespace LabPasswords.Properties {
                 this["frmMainWindowState"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("710, 500")]
+        public global::System.Drawing.Size frmChangePasswordSize {
+            get {
+                return ((global::System.Drawing.Size)(this["frmChangePasswordSize"]));
+            }
+            set {
+                this["frmChangePasswordSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30, 325")]
+        public global::System.Drawing.Point frmChangePasswordLocation {
+            get {
+                return ((global::System.Drawing.Point)(this["frmChangePasswordLocation"]));
+            }
+            set {
+                this["frmChangePasswordLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
+        public global::System.Windows.Forms.FormWindowState frmChangePasswordState {
+            get {
+                return ((global::System.Windows.Forms.FormWindowState)(this["frmChangePasswordState"]));
+            }
+            set {
+                this["frmChangePasswordState"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("710, 410")]
+        public global::System.Drawing.Size frmGetPasswordSize {
+            get {
+                return ((global::System.Drawing.Size)(this["frmGetPasswordSize"]));
+            }
+            set {
+                this["frmGetPasswordSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30, 325")]
+        public global::System.Drawing.Point frmGetPasswordLocation {
+            get {
+                return ((global::System.Drawing.Point)(this["frmGetPasswordLocation"]));
+            }
+            set {
+                this["frmGetPasswordLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
+        public global::System.Windows.Forms.FormWindowState frmGetPasswordState {
+            get {
+                return ((global::System.Windows.Forms.FormWindowState)(this["frmGetPasswordState"]));
+            }
+            set {
+                this["frmGetPasswordState"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("416, 423")]
+        public global::System.Drawing.Size frmRandomPasswordDialogSize {
+            get {
+                return ((global::System.Drawing.Size)(this["frmRandomPasswordDialogSize"]));
+            }
+            set {
+                this["frmRandomPasswordDialogSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30, 325")]
+        public global::System.Drawing.Point frmRandomPasswordDialogLocation {
+            get {
+                return ((global::System.Drawing.Point)(this["frmRandomPasswordDialogLocation"]));
+            }
+            set {
+                this["frmRandomPasswordDialogLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
+        public global::System.Windows.Forms.FormWindowState frmRandomPasswordDialogState {
+            get {
+                return ((global::System.Windows.Forms.FormWindowState)(this["frmRandomPasswordDialogState"]));
+            }
+            set {
+                this["frmRandomPasswordDialogState"] = value;
+            }
+        }
     }
 }

@@ -21,7 +21,19 @@ namespace LabPasswords
 
         private void frmGetPassword_Load(object sender, EventArgs e)
         {
-            txtWarningMessage.Rtf = @"{\rtf1\ansi \b WARNING\b0. Please remember your Password. It is used to encrypt your Passwords file and is \b NOT\b0 stored. There is no way to reset or recover your Password";        
+            txtWarningMessage.Rtf = @"{\rtf1\ansi \b WARNING\b0. Please remember your Password. It is used to encrypt your Passwords file and is \b NOT\b0 stored. There is no way to reset or recover your Password.";
+
+
+            // restore form's window state
+            this.WindowState = LabPasswords.Properties.Settings.Default.frmGetPasswordState;
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                // Never start minimized
+                this.WindowState = FormWindowState.Normal;
+            }
+            this.DesktopBounds =
+                new Rectangle(LabPasswords.Properties.Settings.Default.frmGetPasswordLocation,
+            LabPasswords.Properties.Settings.Default.frmGetPasswordSize);
         }
 
 
@@ -123,6 +135,17 @@ namespace LabPasswords
             {
                 txtDropboxFolder.Text = folderBrowserDialog1.SelectedPath;
             }
+        }
+
+        private void frmGetPassword_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            LabPasswords.Properties.Settings.Default.frmGetPasswordState = this.WindowState;
+            if (this.WindowState == FormWindowState.Normal)
+            {
+                LabPasswords.Properties.Settings.Default.frmGetPasswordLocation = this.Location;
+                LabPasswords.Properties.Settings.Default.frmGetPasswordSize = this.Size;
+            }
+            LabPasswords.Properties.Settings.Default.Save();
         }
 
 
